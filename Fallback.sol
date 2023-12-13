@@ -26,11 +26,11 @@ contract Fallback {
         _;
     }
 
-  function contribute() public payable { // 1st call
+  function contribute() public payable {
     require(msg.value < 0.001 ether);
     contributions[msg.sender] += msg.value;
     if(contributions[msg.sender] > contributions[owner]) {
-      owner = msg.sender;
+      owner = msg.sender; // changing the owner if contribution is > than the current owner's
     }
   }
 
@@ -38,12 +38,12 @@ contract Fallback {
     return contributions[msg.sender];
   }
 
-  function withdraw() public onlyOwner { // 3rd call
-    payable(owner).transfer(address(this).balance);
+  function withdraw() public onlyOwner {
+    payable(owner).transfer(address(this).balance); // only the owner can withdraw
   }
 
-  receive() external payable { // 2nd call
-    require(msg.value > 0 && contributions[msg.sender] > 0); // conditions for change the owner
-    owner = msg.sender; // here the owner is changed
+  receive() external payable { // this is triggered when eth is sent directly to the contract
+    require(msg.value > 0 && contributions[msg.sender] > 0); 
+    owner = msg.sender; // changing the owner if contribution is > than 0 and sent eth amount > 0
   }
 }
