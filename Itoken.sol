@@ -11,8 +11,8 @@ contract Token {
   }
 
   function transfer(address _to, uint _value) public returns (bool) {
-    require(balances[msg.sender] - _value >= 0);
-    balances[msg.sender] -= _value;  // underflow
+    require(balances[msg.sender] - _value >= 0); // prevent transferring more tokens than the balance of msg.sender
+    balances[msg.sender] -= _value;  // underflow possible
     balances[_to] += _value;
     return true;
   }
