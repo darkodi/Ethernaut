@@ -35,3 +35,25 @@ contract Malicious {
         revert("I will remain king forever!");
     }
 }
+
+contract KingFixed {
+    address public king;
+    uint public prize;
+    address public owner;
+
+    constructor() payable {
+        owner = msg.sender;  
+        king = msg.sender;
+        prize = msg.value;
+    }
+
+    function claimKingship() external payable {
+        require(msg.value >= prize, "Value must be greater than current prize");
+        address previousKing = king;
+        king = msg.sender; // update state variables before external call
+        prize = msg.value;
+
+        (bool sent, ) = payable(previousKing).call{value: msg.value}(""); // call instead of transfer
+        require(sent, "Failed to send Ether");
+    }
+}
