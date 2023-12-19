@@ -26,6 +26,8 @@ contract King {
 }
 
 contract Malicious {
+    //  1st payable: the parameter kingContract is an address that can receive Ether
+    //  2nd payable: function itself can receive Ether along with the function call
     function becomeKing(address payable kingContract) external payable {
         (bool sent, ) = kingContract.call{value: msg.value}("");
         require(sent, "Failed to become king");

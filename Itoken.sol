@@ -42,5 +42,9 @@ contract Hack {
   function transfer(address _to, uint _value) public {
     IToken(target).transfer(_to, _value); // important: msg.sender inside transfer function will be Hack contract
   }
+
+  receive() external payable {
+    // Logic to be executed when Ether is sent to the contract
+}
    
 }
