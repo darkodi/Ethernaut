@@ -32,7 +32,8 @@ interface Building {
 
 
 // another way
-contract MaliciousBuilding is Building {
+// "is Building" - good practice (ensures that MaliciousBuilding must implement all functions declared in the Building interface.)
+contract MaliciousBuilding is Building { 
     Elevator public elevator; // directly using the Elevator contract type (less flexible)
     bool public toggle;
 
@@ -65,4 +66,4 @@ contract Elevator {
       top = building.isLastFloor(floor);
     }
   }
-}
+} 
